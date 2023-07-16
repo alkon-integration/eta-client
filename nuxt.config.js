@@ -5,7 +5,9 @@ export default {
   ssr: false,
   env: {
     MAPBOX_ACCESS_TOKEN: process.env.MAPBOX_ACCESS_TOKEN,
-    TRACCAR_SERVER: process.env.TRACCAR_SERVER
+    TRACCAR_SERVER: process.env.TRACCAR_SERVER,
+    TRACCAR_USER: process.env.TRACCAR_USER,
+    TRACCAR_PASS: process.env.TRACCAR_PASS
   },
   // Target: https://go.nuxtjs.dev/config-target
   target: 'static',

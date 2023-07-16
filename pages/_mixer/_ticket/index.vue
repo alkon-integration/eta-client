@@ -15,9 +15,9 @@ import mapboxgl from 'mapbox-gl'
 import bbox from '@turf/bbox'
 import { mapGetters } from 'vuex'
 import { MapboxStyleSwitcherControl } from 'mapbox-gl-style-switcher'
-import Eta from '../components/eta'
+import Eta from '../../../components/eta.vue'
 import 'mapbox-gl-style-switcher/styles.css'
-import { format } from '@/utils/mapbox'
+import { format } from '~/utils/mapbox'
 
 mapboxgl.accessToken = process.env.MAPBOX_ACCESS_TOKEN
 let map = null
@@ -49,7 +49,7 @@ export default {
   },
   methods: {
     async getLastPosition () {
-      await this.$store.dispatch('getData')
+      await this.$store.dispatch('getData', this.$route.params)
     },
     initMap () {
       map = new mapboxgl.Map({
