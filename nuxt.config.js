@@ -33,8 +33,7 @@ export default {
   ],
 
   plugins: [
-    '~/plugins/fontawesome.js',
-    '~/plugins/sentry.js'
+    '~/plugins/fontawesome.js'
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
