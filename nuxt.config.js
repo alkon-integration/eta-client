@@ -72,7 +72,7 @@ export default {
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
     extend (config, { isDev }) {
-      if (!isDev) {
+      if (!isDev && process.env.SENTRY_AUTH_TOKEN) {
         config.devtool = 'source-map'
         config.plugins.push(new SentryPlugin({
           org: 'pinme-97',
