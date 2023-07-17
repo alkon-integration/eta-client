@@ -5,7 +5,7 @@ frontend:
       commands:
         - npm config set "@fortawesome:registry" https://npm.fontawesome.com/
         - npm config set "//npm.fontawesome.com/:_authToken" "${NPM_FONT_AWESOME_AUTH_TOKEN}"
-        - npm ci --loglevel verbose
+        - npm ci
     build:
       commands:
         - npm run generate
