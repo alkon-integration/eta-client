@@ -50,7 +50,8 @@ export default {
   modules: [
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
-    '@nuxtjs/i18n'
+    '@nuxtjs/i18n',
+    '@nuxtjs/proxy'
   ],
   i18n: {
     locales: ['pt', 'es'],
@@ -66,8 +67,16 @@ export default {
   },
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
-    baseURL: `https://${process.env.TRACCAR_SERVER}/api`,
+    baseURL: '/api',
     credentials: true
+  },
+  ...process.env.NODE_ENV === 'development' && {
+    proxy: {
+      '/api': {
+        target: 'https://api.pinme.io',
+        ws: true
+      }
+    }
   }
 
   // Build Configuration: https://go.nuxtjs.dev/config-build

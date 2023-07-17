@@ -1,3 +1,8 @@
+const auth = {
+  username: process.env.TRACCAR_USER,
+  password: process.env.TRACCAR_PASS
+}
+
 export const state = () => ({
   duration: -1,
   distance: 0,
@@ -73,15 +78,9 @@ export const mutations = {
 
 export const actions = {
   async getData ({ commit }, { mixer, ticket }) {
-    const auth = {
-      username: process.env.TRACCAR_USER,
-      password: process.env.TRACCAR_PASS
-    }
     const devices = await this.$axios.$get('devices', { auth })
     const device = devices.find(d => d.name === mixer)
-    if (!device) {
-      throw new Error('datos inválidos')
-    }
+    if (!device) { throw new Error('datos inválidos') }
     const users = await this.$axios.$get('users', { auth })
     const email = 'polpaico' + device.name
     let user = users.find(u => u.email === email)
@@ -92,7 +91,9 @@ export const actions = {
         password: process.env.TRACCAR_PASS
       }, { auth })
     }
-    await this.$axios.$post('permissions', { userId: user.id, deviceId: device.id }, { auth })
+    try {
+      await this.$axios.$post('permissions', { userId: user.id, deviceId: device.id }, { auth })
+    } catch (e) { console.error(e) }
     const body = `email=${user.email}&password=${encodeURIComponent(process.env.TRACCAR_PASS)}`
     commit('SET_SESSION', await this.$axios.$post('/session', body))
     commit('SET_DEVICES', await this.$axios.$get('/devices'))

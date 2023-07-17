@@ -208,7 +208,7 @@ export default {
       this.$store.commit('setDistance', data.distance)
     },
     initWebSocket () {
-      socket = new WebSocket(`wss://${process.env.TRACCAR_SERVER}/api/socket`)
+      socket = new WebSocket(`wss://${window.location.hostname}/api/socket`)
       const events = ['onclose', 'onerror', 'onopen']
       events.forEach((eventType) => {
         socket[eventType] = (event) => {
