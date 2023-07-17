@@ -31,6 +31,10 @@
         {{ endAddress }}
       </span>
     </p>
+    <p v-if="ticket && ticket.cticket">
+      <span>Guía: {{ ticket.cticket }}</span><br>
+      <span>Estado: {{ ticket.state | formatTicketState }}</span>
+    </p>
     <span style="font-size: small">Actualizado {{ updated }}</span><br>
     <span style="font-size: smaller">{{ title }}</span>
   </div>
@@ -48,11 +52,19 @@ export default {
   filters: {
     fDuration (duration) {
       return format.duration(duration)
+    },
+    formatTicketState (state) {
+      return {
+        TJB: 'A Obra',
+        AJB: 'En Obra',
+        IYD: 'En Planta',
+        TPL: 'A Planta'
+      }[state] || state
     }
   },
   computed: {
-    ...mapGetters(['address', 'duration', 'distance', 'devices', 'geofences', 'startColor', 'endColor', 'onColor', 'endAddress', 'session', 'position']),
-    title: () => 'v' + document.title.split(' ')[2],
+    ...mapGetters(['ticket', 'address', 'duration', 'distance', 'devices', 'geofences', 'startColor', 'endColor', 'onColor', 'endAddress', 'session', 'position']),
+    title: () => 'v' + document.title.split(' ')[1],
     fDistance () { return format.metric(this.distance) },
     updated () {
       const locale = locales[navigator.language.substring(0, 2)]

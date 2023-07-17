@@ -16,7 +16,7 @@ export default function (app, inject) {
       return ddb.send(new GetItemCommand({
         TableName,
         Key: marshall({ idgps })
-      })).then(r => unmarshall(r.Item))
+      })).then(r => r.Item && unmarshall(r.Item))
     }
   }
   inject('dynamo', dynamo)

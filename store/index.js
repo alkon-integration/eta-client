@@ -8,7 +8,11 @@ export const state = () => ({
   endColor: '#f30',
   session: null,
   position: null,
-  address: ''
+  address: '',
+  latitude: 0,
+  longitude: 0,
+  ticket: {},
+  endAddress: ''
 })
 
 export const getters = {
@@ -20,12 +24,24 @@ export const getters = {
   startColor: state => state.startColor,
   onColor: state => state.onColor,
   endColor: state => state.endColor,
-  end: state => state.end, // state.session.attributes.linkVersion && state.session.attributes.linkVersion.split(','),
-  endAddress: state => state.session && state.session.attributes.endAddress,
+  end: state => state.latitude && [state.longitude, state.latitude],
+  endAddress: state => state.endAddress,
   position: state => state.position,
-  device: state => state.devices && state.devices[0] && state.devices[0].name
+  device: state => state.devices && state.devices[0] && state.devices[0].name,
+  ticket: state => state.ticket
 }
-
+function convertLat (latitude) {
+  const d1 = parseFloat(latitude) / 100.0
+  const num1 = Math.trunc(d1)
+  const num2 = (d1 - num1) * 100.0 / 60.0
+  return (-num1 - num2)
+}
+function convertLon (longitude) {
+  const d2 = parseFloat(longitude) / 100.0
+  const num4 = Math.trunc(d2)
+  const num5 = (d2 - num4) * 100.0 / 60.0
+  return (-num4 - num5)
+}
 export const mutations = {
   setDuration (state, duration) {
     state.duration = duration
@@ -43,14 +59,20 @@ export const mutations = {
   SET_SESSION (state, session) {
     state.session = session
   },
-  SET_ADDRESS (state, address) {
-    state.address = address
+  SET_TICKET (state, ticket) {
+    state.ticket = ticket
+    if (ticket.jobid) {
+      state.latitude = convertLat(ticket.jobid.split(',')[0])
+      state.longitude = convertLon(ticket.jobid.split(',')[1])
+    }
+  },
+  SET_END_ADDRESS (state, address) {
+    state.endAddress = address
   }
 }
 
 export const actions = {
   async getData ({ commit }, { mixer, ticket }) {
-    console.log(this.$dynamo)
     const auth = {
       username: process.env.TRACCAR_USER,
       password: process.env.TRACCAR_PASS
@@ -58,7 +80,7 @@ export const actions = {
     const devices = await this.$axios.$get('devices', { auth })
     const device = devices.find(d => d.name === mixer)
     if (!device) {
-      this.$router.push('/').then()
+      throw new Error('datos inválidos')
     }
     const users = await this.$axios.$get('users', { auth })
     const email = 'polpaico' + device.name
@@ -74,5 +96,10 @@ export const actions = {
     const body = `email=${user.email}&password=${encodeURIComponent(process.env.TRACCAR_PASS)}`
     commit('SET_SESSION', await this.$axios.$post('/session', body))
     commit('SET_DEVICES', await this.$axios.$get('/devices'))
+    const _ticket = await this.$dynamo.get(device.name)
+    if (!_ticket || _ticket.cticket !== ticket) {
+      throw new Error('datos inválidos')
+    }
+    commit('SET_TICKET', _ticket)
   }
 }

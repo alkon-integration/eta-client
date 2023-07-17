@@ -173,15 +173,13 @@ export default {
       })
     },
     async getRoute (start) {
-      // make a directions request using cycling profile
-      // an arbitrary start will always be the same
-      // only the end or destination will change
       const query = await fetch(
         `https://api.mapbox.com/directions/v5/mapbox/driving/${start[0]},${start[1]};${this.end[0]},${this.end[1]}?steps=true&geometries=geojson&access_token=${mapboxgl.accessToken}`,
         { method: 'GET' }
       )
       const json = await query.json()
       const data = json.routes[0]
+      this.$store.commit('SET_END_ADDRESS', json.waypoints.slice(-1)[0].name)
       const route = data.geometry.coordinates
       const geojson = {
         type: 'Feature',
