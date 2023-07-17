@@ -39,7 +39,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['position', 'device', 'geofences', 'startColor', 'endColor', 'end'])
+    ...mapGetters(['duration', 'position', 'device', 'geofences', 'startColor', 'endColor', 'end'])
   },
   async mounted () {
     this.loading = true
@@ -151,27 +151,6 @@ export default {
       }
       this.loading = false
     },
-    addTextLayer (geojson) {
-      map.addLayer({
-        id: 'routeText',
-        type: 'symbol',
-        source: {
-          type: 'geojson',
-          data: geojson
-        },
-        layout: {
-          'text-field': ['get', 'text'],
-          'text-variable-anchor': ['left', 'right', 'top', 'bottom'],
-          'text-offset': [1, 1],
-          'symbol-placement': 'point',
-          'text-size': 18
-        },
-        paint: {
-          'text-halo-color': 'white',
-          'text-halo-width': 2
-        }
-      })
-    },
     async getRoute (start) {
       const query = await fetch(
         `https://api.mapbox.com/directions/v5/mapbox/driving/${start[0]},${start[1]};${this.end[0]},${this.end[1]}?steps=true&geometries=geojson&access_token=${mapboxgl.accessToken}`,
@@ -212,17 +191,18 @@ export default {
             'line-opacity': 0.75
           }
         })
-        // this.addTextLayer(geojson)
       }
       try {
-        map.fitBounds(bbox(geojson), {
-          padding: {
-            top: 30,
-            bottom: 30,
-            left: 30,
-            right: 30
-          }
-        })
+        if (this.duration === -1) {
+          map.fitBounds(bbox(geojson), {
+            padding: {
+              top: 30,
+              bottom: 30,
+              left: 30,
+              right: 30
+            }
+          })
+        }
       } catch (e) {
         console.error(e)
       }
