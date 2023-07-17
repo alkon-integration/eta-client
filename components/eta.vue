@@ -58,7 +58,8 @@ export default {
         TJB: 'A Obra',
         AJB: 'En Obra',
         IYD: 'En Planta',
-        TPL: 'A Planta'
+        TPL: 'A Planta',
+        LDS: 'Cargando'
       }[state] || state
     }
   },
