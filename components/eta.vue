@@ -16,7 +16,7 @@
     </div>
     <p :style="`color:${startColor}`">
       <span class="fa">
-        <font-awesome-icon icon="fa-solid fa-car" />
+        <font-awesome-icon icon="fa-solid fa-truck-container" />
       </span>
       <span>
         {{ devices[0] && devices[0].name }}<br>
