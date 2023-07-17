@@ -50,6 +50,7 @@ export const mutations = {
 
 export const actions = {
   async getData ({ commit }, { mixer, ticket }) {
+    console.log(this.$dynamo)
     const auth = {
       username: process.env.TRACCAR_USER,
       password: process.env.TRACCAR_PASS

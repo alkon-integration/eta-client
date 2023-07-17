@@ -1,5 +1,3 @@
-import SentryPlugin from '@sentry/webpack-plugin'
-
 export default {
   // Disable server-side rendering: https://go.nuxtjs.dev/ssr-mode
   ssr: false,
@@ -35,7 +33,7 @@ export default {
   ],
 
   plugins: [
-    '~/plugins/fontawesome.js'
+    '~/plugins/fontawesome.js', '~/plugins/dynamo.js'
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -68,19 +66,7 @@ export default {
   axios: {
     baseURL: `https://${process.env.TRACCAR_SERVER}/api`,
     credentials: true
-  },
+  }
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
-  build: {
-    extend (config, { isDev }) {
-      if (!isDev && process.env.SENTRY_AUTH_TOKEN) {
-        config.devtool = 'source-map'
-        config.plugins.push(new SentryPlugin({
-          org: 'pinme-97',
-          project: 'fleetmap',
-          release: process.env.npm_package_version
-        }))
-      }
-    }
-  }
 }
