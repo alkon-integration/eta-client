@@ -72,34 +72,6 @@ export default {
       })
     },
     async update () {
-      if (this.end && !map.getLayer('point')) {
-        // Add starting point to the map
-        map.addLayer({
-          id: 'point',
-          type: 'circle',
-          source: {
-            type: 'geojson',
-            data: {
-              type: 'FeatureCollection',
-              features: [
-                {
-                  type: 'Feature',
-                  properties: {},
-                  geometry: {
-                    type: 'Point',
-                    coordinates: this.end
-                  }
-                }
-              ]
-            }
-          },
-          paint: {
-            'circle-radius': 10,
-            'circle-color': this.endColor
-          }
-        })
-        // this is where the code from the next step will go
-      }
       const coordinates = [this.position.longitude, this.position.latitude]
       const start = {
         type: 'FeatureCollection',
@@ -112,6 +84,40 @@ export default {
             }
           }
         ]
+      }
+      if (this.end) {
+        await this.getRoute(coordinates)
+        if (!map.getLayer('point')) {
+          map.addLayer({
+            id: 'point',
+            type: 'circle',
+            source: {
+              type: 'geojson',
+              data: {
+                type: 'FeatureCollection',
+                features: [
+                  {
+                    type: 'Feature',
+                    properties: {},
+                    geometry: {
+                      type: 'Point',
+                      coordinates: this.end
+                    }
+                  }
+                ]
+              }
+            },
+            paint: {
+              'circle-radius': 10,
+              'circle-color': this.endColor
+            }
+          })
+        }
+      } else {
+        map.flyTo({
+          center: coordinates,
+          essential: true
+        })
       }
       if (map.getLayer('start')) {
         map.getSource('start').setData(start)
@@ -139,14 +145,6 @@ export default {
             'circle-radius': 10,
             'circle-color': this.startColor
           }
-        })
-      }
-      if (this.end) {
-        await this.getRoute(coordinates)
-      } else {
-        map.flyTo({
-          center: coordinates,
-          essential: true
         })
       }
       this.loading = false
