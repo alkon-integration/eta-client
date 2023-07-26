@@ -150,47 +150,47 @@ export default {
       this.loading = false
     },
     async getRoute (start) {
-      const query = await fetch(
-        `https://api.mapbox.com/directions/v5/mapbox/driving/${start[0]},${start[1]};${this.end[0]},${this.end[1]}?steps=true&geometries=geojson&access_token=${process.env.mapboxglAccessTokenDirections}`,
-        { method: 'GET' }
-      )
-      const json = await query.json()
-      const data = json.routes[0]
-      this.$store.commit('SET_END_ADDRESS', json.waypoints.slice(-1)[0].name)
-      const route = data.geometry.coordinates
-      const geojson = {
-        type: 'Feature',
-        properties: {
-          text: `${format.duration(data.duration)}\n${format.metric(data.distance)}`
-        },
-        geometry: {
-          type: 'LineString',
-          coordinates: route
-        }
-      }
-      // if the route already exists on the map, we'll reset it using setData
-      if (map.getSource('route')) {
-        map.getSource('route').setData(geojson)
-      } else {
-        map.addLayer({
-          id: 'route',
-          type: 'line',
-          source: {
-            type: 'geojson',
-            data: geojson
-          },
-          layout: {
-            'line-join': 'round',
-            'line-cap': 'round'
-          },
-          paint: {
-            'line-color': '#3887be',
-            'line-width': 5,
-            'line-opacity': 0.75
-          }
-        })
-      }
       try {
+        const query = await fetch(
+          `https://api.mapbox.com/directions/v5/mapbox/driving/${start[0]},${start[1]};${this.end[0]},${this.end[1]}?steps=true&geometries=geojson&access_token=${process.env.mapboxglAccessTokenDirections}`,
+          { method: 'GET' }
+        )
+        const json = await query.json()
+        const data = json.routes[0]
+        this.$store.commit('SET_END_ADDRESS', json.waypoints.slice(-1)[0].name)
+        const route = data.geometry.coordinates
+        const geojson = {
+          type: 'Feature',
+          properties: {
+            text: `${format.duration(data.duration)}\n${format.metric(data.distance)}`
+          },
+          geometry: {
+            type: 'LineString',
+            coordinates: route
+          }
+        }
+        // if the route already exists on the map, we'll reset it using setData
+        if (map.getSource('route')) {
+          map.getSource('route').setData(geojson)
+        } else {
+          map.addLayer({
+            id: 'route',
+            type: 'line',
+            source: {
+              type: 'geojson',
+              data: geojson
+            },
+            layout: {
+              'line-join': 'round',
+              'line-cap': 'round'
+            },
+            paint: {
+              'line-color': '#3887be',
+              'line-width': 5,
+              'line-opacity': 0.75
+            }
+          })
+        }
         if (this.duration === -1) {
           map.fitBounds(bbox(geojson), {
             padding: {
@@ -201,11 +201,11 @@ export default {
             }
           })
         }
+        this.$store.commit('setDuration', data.duration)
+        this.$store.commit('setDistance', data.distance)
       } catch (e) {
         console.error(e)
       }
-      this.$store.commit('setDuration', data.duration)
-      this.$store.commit('setDistance', data.distance)
     },
     initWebSocket () {
       socket = new WebSocket(`wss://${window.location.hostname}/api/socket`)
