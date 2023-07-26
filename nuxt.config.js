@@ -7,7 +7,8 @@ export default {
     TRACCAR_USER: process.env.TRACCAR_USER,
     TRACCAR_PASS: process.env.TRACCAR_PASS,
     accessKeyId: process.env.accessKeyId,
-    secretAccessKey: process.env.secretAccessKey
+    secretAccessKey: process.env.secretAccessKey,
+    mapboxglAccessTokenDirections: process.env.mapboxglAccessTokenDirections
   },
   // Target: https://go.nuxtjs.dev/config-target
   target: 'static',
