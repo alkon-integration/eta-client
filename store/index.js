@@ -99,7 +99,7 @@ export const actions = {
     commit('SET_DEVICES', await this.$axios.$get('/devices'))
     const _ticket = await this.$dynamo.get(device.name)
     if (!_ticket || _ticket.cticket !== ticket) {
-      alert('ticket invalido: ' + ticket + ' vs ' + _ticket && _ticket.cticket)
+      alert('ticket invalido: ' + ticket + ' vs ' + (_ticket && _ticket.cticket))
     }
     commit('SET_TICKET', _ticket)
   }
