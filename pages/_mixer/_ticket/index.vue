@@ -213,7 +213,7 @@ export default {
       events.forEach((eventType) => {
         socket[eventType] = async (event) => {
           if (event.type === 'close') {
-            const positions = await this.$axios.$post('/positions').then(d => d.data)
+            const positions = await this.$axios.$get('/positions').then(d => d.data)
             if (positions.length) {
               const last = positions.pop()
               this.$store.commit('setPosition', last)
