@@ -207,12 +207,18 @@ export default {
         console.error(e)
       }
     },
-    initWebSocket () {
+    async initWebSocket () {
       socket = new WebSocket(`wss://${window.location.hostname}/api/socket`)
       const events = ['onclose', 'onerror', 'onopen']
       events.forEach((eventType) => {
-        socket[eventType] = (event) => {
+        socket[eventType] = async (event) => {
           if (event.type === 'close') {
+            const positions = await this.$axios.$post('/positions').then(d => d.data)
+            if (positions.length) {
+              const last = positions.pop()
+              this.$store.commit('setPosition', last)
+              this.update()
+            } 
             setTimeout(() => {
               this.initWebSocket()
             }, 10000)
