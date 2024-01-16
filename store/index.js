@@ -85,11 +85,13 @@ export const actions = {
     const email = 'polpaico' + device.name
     let user = users.find(u => u.email === email)
     if (!user) {
+      console.log('creating user', email)
       user = await this.$axios.$post('users', {
         name: email,
         email,
         password: process.env.TRACCAR_PASS
       }, { auth })
+      console.log(user)
     }
     try {
       await this.$axios.$post('permissions', { userId: user.id, deviceId: device.id }, { auth })
