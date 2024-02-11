@@ -85,13 +85,11 @@ export const actions = {
     const email = 'polpaico' + device.name
     let user = users.find(u => u.email === email)
     if (!user) {
-      console.log('creating user', email)
       user = await this.$axios.$post('users', {
         name: email,
         email,
         password: process.env.TRACCAR_PASS
       }, { auth })
-      console.log(user)
     }
     try {
       await this.$axios.$post('permissions', { userId: user.id, deviceId: device.id }, { auth })
@@ -102,6 +100,7 @@ export const actions = {
     const _ticket = await this.$dynamo.get(device.name)
     if (!_ticket || _ticket.cticket !== ticket) {
       console.error('ticket invalido: ' + ticket + ' vs ' + (_ticket && _ticket.cticket))
+      throw new Error('ticket invalido')
     }
     commit('SET_TICKET', _ticket)
   }
