@@ -39,7 +39,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['duration', 'position', 'device', 'geofences', 'startColor', 'endColor', 'end'])
+    ...mapGetters(['duration', 'position', 'device', 'geofences', 'startColor', 'endColor', 'end', 'session'])
   },
   async mounted () {
     this.loading = true
@@ -207,32 +207,30 @@ export default {
         console.error(e)
       }
     },
-    async initWebSocket () {
-      socket = new WebSocket(`wss://${window.location.hostname}/api/socket`)
-      const events = ['onclose', 'onerror', 'onopen']
-      events.forEach((eventType) => {
-        socket[eventType] = async (event) => {
-          if (event.type === 'close') {
-            const positions = await this.$axios.$get('/positions')
-            if (positions.length) {
-              const last = positions.pop()
-              this.$store.commit('setPosition', last)
-              this.update()
-            } 
-            setTimeout(() => {
-              this.initWebSocket()
-            }, 10000)
-          }
+    initWebSocket () {
+      socket = new WebSocket(`wss://${process.env.TRACCAR_SERVER}/api/socket`)
+      socket.onclose = async () => {
+        const positions = await this.$axios.$get('/positions')
+        if (positions.length) {
+          const last = positions.pop()
+          this.$store.commit('setPosition', last)
+          this.update().then()
         }
-        socket.onmessage = (event) => {
-          const data = JSON.parse(event.data)
-          if (data.positions && data.positions.length) {
-            const last = data.positions.pop()
-            this.$store.commit('setPosition', last)
-            this.update()
-          }
+        setTimeout(() => {
+          this.initWebSocket()
+        }, 10000)
+      }
+      socket.onopen = () => {
+        socket.send(this.session.token)
+      }
+      socket.onmessage = (event) => {
+        const data = JSON.parse(event.data)
+        if (data.positions && data.positions.length) {
+          const last = data.positions.pop()
+          this.$store.commit('setPosition', last)
+          this.update()
         }
-      })
+      }
     }
   }
 }

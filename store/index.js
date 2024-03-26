@@ -33,7 +33,8 @@ export const getters = {
   endAddress: state => state.endAddress,
   position: state => state.position,
   device: state => state.devices && state.devices[0] && state.devices[0].name,
-  ticket: state => state.ticket
+  ticket: state => state.ticket,
+  session: state => state.session
 }
 function convertLat (latitude) {
   const d1 = parseFloat(latitude) / 100.0
