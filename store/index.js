@@ -92,9 +92,7 @@ export const actions = {
         password: process.env.TRACCAR_PASS
       }, { auth })
     }
-    try {
-      await this.$axios.$post('permissions', { userId: user.id, deviceId: device.id }, { auth })
-    } catch (e) { console.error(e) }
+    this.$axios.$post('permissions', { userId: user.id, deviceId: device.id }, { auth }).catch(e => console.error(e))
     const body = `email=${user.email}&password=${encodeURIComponent(process.env.TRACCAR_PASS)}`
     commit('SET_SESSION', await this.$axios.$post('/session', body))
     commit('SET_DEVICES', await this.$axios.$get('/devices'))
