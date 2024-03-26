@@ -68,7 +68,7 @@ export default {
   },
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
-    baseURL: 'https://traccar-eu.fleetmap.io/api',
+    baseURL: 'https://traccar-eu.fleetmap.pt/api',
     credentials: true
   },
   ...process.env.NODE_ENV === 'development' && {

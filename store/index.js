@@ -78,7 +78,7 @@ export const mutations = {
 }
 
 export const actions = {
-  async getData ({ commit }, { mixer, ticket }) {
+  async getData ({ commit, state }, { mixer, ticket }) {
     const devices = await this.$axios.$get('devices', { auth })
     const device = devices.find(d => d.name === mixer)
     if (!device) { throw new Error('datos inválidos') }
@@ -94,7 +94,12 @@ export const actions = {
     }
     this.$axios.$post('permissions', { userId: user.id, deviceId: device.id }, { auth }).catch(e => console.error(e))
     const body = `email=${user.email}&password=${encodeURIComponent(process.env.TRACCAR_PASS)}`
-    commit('SET_SESSION', await this.$axios.$post('/session', body))
+    const session = await this.$axios.$post('/session', body)
+    if (!session.token) {
+      session.token = crypto.randomUUID()
+      this.$axios.$put('/users/' + session.id, session).then()
+    }
+    commit('SET_SESSION', session)
     commit('SET_DEVICES', await this.$axios.$get('/devices'))
     const _ticket = await this.$dynamo.get(device.name)
     if (!_ticket || _ticket.cticket !== ticket) {
