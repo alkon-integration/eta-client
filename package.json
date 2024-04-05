@@ -1,6 +1,6 @@
 {
   "name": "eta-client",
-  "version": "1.0.72",
+  "version": "1.0.73",
   "private": true,
   "scripts": {
     "dev": "nuxt",
@@ -21,7 +21,7 @@
     "@nuxtjs/axios": "^5.13.6",
     "@nuxtjs/i18n": "^7.3.1",
     "@nuxtjs/proxy": "^2.1.0",
-    "@nuxtjs/sentry": "^8.0.7",
+    "@sentry/vue": "^7.109.0",
     "@turf/bbox": "^6.5.0",
     "core-js": "3.31.1",
     "date-fns": "2.30.0",
