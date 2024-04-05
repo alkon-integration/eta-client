@@ -2,6 +2,7 @@ import Vue from "vue";
 import * as Sentry from "@sentry/vue";
 
 Sentry.init({
+    Vue,
     dsn: "https://7a563b674cbc0d1f946c40911bc49e0d@o4507029627797504.ingest.us.sentry.io/4507029632122880",
     integrations: [
       Sentry.browserTracingIntegration(),
