@@ -7,9 +7,10 @@ Sentry.init({
   integrations: [
       Sentry.browserTracingIntegration(),
       Sentry.replayIntegration({
-      maskAllText: false,
-      blockAllMedia: false,
-      }),
+        maskAllText: false,
+        blockAllMedia: false,
+        networkDetailAllowUrls: ['/api/devices'],
+      })
   ],
   tracesSampleRate: 1.0, 
   tracePropagationTargets: [/.*/],
