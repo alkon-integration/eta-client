@@ -97,7 +97,11 @@ export const actions = {
     const session = await this.$axios.$post('/session', body)
     if (!session.token) {
       session.token = crypto.randomUUID()
+      try {
       this.$axios.$put('/users/' + session.id, session).then()
+      } catch (e) {
+        console.error(e)
+      }
     }
     commit('SET_SESSION', session)
     commit('SET_DEVICES', await this.$axios.$get('/devices'))
