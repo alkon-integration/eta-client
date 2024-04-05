@@ -97,14 +97,10 @@ export const actions = {
     const session = await this.$axios.$post('/session', body)
     if (!session.token) {
       session.token = crypto.randomUUID()
-      try {
-      this.$axios.$put('/users/' + session.id, session).then()
-      } catch (e) {
-        console.error(e)
-      }
+      this.$axios.$put('/users/' + session.id, session).catch(e => console.error(e))
     }
     commit('SET_SESSION', session)
-    commit('SET_DEVICES', await this.$axios.$get('/devices'))
+    commit('SET_DEVICES', await this.$axios.$get('/devices?token='+session.token))
     const _ticket = await this.$dynamo.get(device.name)
     if (!_ticket || _ticket.cticket !== ticket) {
       alert('ticket invalido: ' + ticket + ' vs ' + (_ticket && _ticket.cticket))
