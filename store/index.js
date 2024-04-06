@@ -78,12 +78,9 @@ export const mutations = {
 }
 
 export const actions = {
-  async getData ({ commit, state }, { mixer, ticket }) {
-    const devices = await this.$axios.$get('devices', { auth })
-    const device = devices.find(d => d.name === mixer)
-    if (!device) { throw new Error('datos inválidos') }
+  async getData ({ commit }, { mixer, ticket }) {
     const users = await this.$axios.$get('users', { auth })
-    const email = 'polpaico' + device.name
+    const email = 'polpaico' + mixer
     let user = users.find(u => u.email === email)
     if (!user) {
       user = await this.$axios.$post('users', {

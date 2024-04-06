@@ -208,9 +208,10 @@ export default {
       }
     },
     initWebSocket () {
+      const {mixer} = this.$route.params
       socket = new WebSocket(`wss://${process.env.TRACCAR_SERVER}/api/socket`)
       socket.onclose = async () => {
-        const positions = await this.$axios.$get('/positions')
+        const positions = await this.$axios.$get('/positions', {auth: {username: 'polpaico' + mixer, password: process.env.TRACCAR_PASS}})
         if (positions.length) {
           const last = positions.pop()
           this.$store.commit('setPosition', last)
