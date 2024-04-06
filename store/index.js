@@ -97,8 +97,8 @@ export const actions = {
       this.$axios.$put('/users/' + session.id, session).catch(e => console.error(e))
     }
     commit('SET_SESSION', session)
-    commit('SET_DEVICES', await this.$axios.$get('devices', {auth: {username: user.email, password: process.env.TRACCAR_PASS}}))
-    const _ticket = await this.$dynamo.get(device.name)
+    commit('SET_DEVICES', await this.$axios.$get('devices', { auth: { username: user.email, password: process.env.TRACCAR_PASS } }))
+    const _ticket = await this.$dynamo.get(mixer)
     if (!_ticket || _ticket.cticket !== ticket) {
       alert('ticket invalido: ' + ticket + ' vs ' + (_ticket && _ticket.cticket))
       await this.$router.push('/')
