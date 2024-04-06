@@ -89,7 +89,7 @@ export const actions = {
         password: process.env.TRACCAR_PASS
       }, { auth })
     }
-    this.$axios.$post('permissions', { userId: user.id, deviceId: device.id }, { auth }).catch(e => console.error(e))
+    // this.$axios.$post('permissions', { userId: user.id, deviceId: device.id }, { auth }).catch(e => console.error(e))
     const body = `email=${user.email}&password=${encodeURIComponent(process.env.TRACCAR_PASS)}`
     const session = await this.$axios.$post('/session', body)
     if (!session.token) {
