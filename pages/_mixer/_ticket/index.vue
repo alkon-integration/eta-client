@@ -47,11 +47,10 @@ export default {
     ...mapGetters(['duration', 'position', 'geofences', 'startColor', 'endColor', 'end', 'session']),
     title: () => 'v' + document.title.split(' ')[1]
   },
-  async mounted () {
+  mounted () {
     this.loading = true
-    await this.getLastPosition()
+    this.getLastPosition()
     this.initMap()
-    setInterval(() => this.timer++, 1000)
   },
   methods: {
     async getLastPosition () {
