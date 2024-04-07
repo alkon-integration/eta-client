@@ -2,6 +2,7 @@
   from = "/api/*"
   to = "http://traccar-eu.fleetmap.io/api/:splat"
   status = 200
+  force = true
 
 [[redirects]]
   from = "/:a/:b"
