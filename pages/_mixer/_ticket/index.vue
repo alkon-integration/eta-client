@@ -47,6 +47,13 @@ export default {
     ...mapGetters(['duration', 'position', 'geofences', 'startColor', 'endColor', 'end', 'session']),
     title: () => 'v' + document.title.split(' ')[1]
   },
+  watch: {
+    session () {
+      if (socket && this.session && this.session.token) {
+        socket.send(this.session.token)
+      }
+    }
+  },
   mounted () {
     this.loading = true
     this.getLastPosition()
@@ -224,7 +231,9 @@ export default {
         }, 10000)
       }
       socket.onopen = () => {
-        socket.send(this.session.token)
+        if (this.session) {
+          socket.send(this.session.token)
+        }
       }
       socket.onmessage = (event) => {
         const data = JSON.parse(event.data)
