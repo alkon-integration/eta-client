@@ -1,9 +1,6 @@
 <template>
   <div id="eta">
-    <div :style="`color:${startColor}`" class="eta-inner">
-      <span class="fa">
-        <font-awesome-icon icon="fa-solid fa-truck" />
-      </span>
+    <div :style="`color:${startColor}`" class="eta-inner">      
       <span>
         {{ devices[0] && devices[0].name }}
       </span>

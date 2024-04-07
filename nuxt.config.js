@@ -36,7 +36,7 @@ export default {
   ],
 
   plugins: [
-    '~/plugins/fontawesome.js', '~/plugins/dynamo.js', '~/plugins/sentry.js'
+    '~/plugins/dynamo.js', '~/plugins/sentry.js'
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
