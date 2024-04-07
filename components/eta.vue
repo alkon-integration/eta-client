@@ -1,8 +1,8 @@
 <template>
   <div id="eta">
-    <div :style="`color:${startColor}`" class="eta-inner">      
+    <div :style="`color:${startColor}`" class="eta-inner">
       <span>
-        {{ devices[0] && devices[0].name }}
+        {{ $route.params.mixer }}
       </span>
       <span>
         (Actualizado {{ updated }})
@@ -44,8 +44,8 @@ export default {
     fDistance () { return format.metric(this.distance) },
     updated () {
       const locale = locales[navigator.language.substring(0, 2)]
-      return this.devices[0] &&
-       formatDistance(new Date(this.devices[0].lastUpdate), new Date(), { addSuffix: true, locale })
+      return this.position &&
+       formatDistance(new Date(this.position.fixTime), new Date(), { addSuffix: true, locale })
     }
   },
   methods: {
