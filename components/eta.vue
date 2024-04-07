@@ -7,10 +7,10 @@
       <span>
         {{ devices[0] && devices[0].name }}
       </span>
-      <span style="font-size: smaller">
+      <span>
         (Actualizado {{ updated }})
       </span><br>
-      <span style="font-size: smaller">{{ address }}</span>
+      <span style="">{{ address }}</span>
     </div>
     <div v-if="ticket && ticket.cticket" class="eta-inner">
       <span>Guía: {{ ticket.cticket }}</span><br>
@@ -84,5 +84,6 @@ export default {
 .eta-inner {
   text-align: center;
   padding: 10px;
+  font-size: smaller;
 }
 </style>
