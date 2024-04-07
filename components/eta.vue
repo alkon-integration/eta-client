@@ -79,6 +79,7 @@ export default {
   display: flex;
   top: 10px;
   left: 10px;
+  max-width: calc(100% - 20px);
 }
 .eta-inner {
   text-align: center;
