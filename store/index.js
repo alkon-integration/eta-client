@@ -8,7 +8,7 @@ export const state = () => ({
   distance: 0,
   geofences: [],
   devices: [],
-  startColor: 'darkblue',
+  startColor: 'rgba(255, 100, 100, 1)',
   onColor: '#3D993D',
   endColor: '#f30',
   session: null,

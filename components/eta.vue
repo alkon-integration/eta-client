@@ -1,42 +1,21 @@
 <template>
   <div id="eta">
-    <div v-if="duration !== -1">
+    <div :style="`color:${startColor}`" class="eta-inner">
       <span class="fa">
-        <font-awesome-icon icon="fa-solid fa-clock" />
+        <font-awesome-icon icon="fa-solid fa-truck" />
       </span>
       <span>
-        {{ duration | fDuration }}
+        {{ devices[0] && devices[0].name }}
       </span>
-      <span class="fa" style="padding-left: 5px">
-        <font-awesome-icon icon="fa-solid fa-road" />
-      </span>
-      <span>
-        {{ fDistance }}
-      </span>
-    </div>
-    <p :style="`color:${startColor}`">
-      <span class="fa">
-        <font-awesome-icon icon="fa-solid fa-truck-container" />
-      </span>
-      <span>
-        {{ devices[0] && devices[0].name }}<br>
-      </span>
+      <span style="font-size: smaller">
+        (Actualizado {{ updated }})
+      </span><br>
       <span style="font-size: smaller">{{ address }}</span>
-    </p>
-    <p v-if="endAddress" :style="`color:` + getStatusColor()">
-      <span class="fa">
-        <font-awesome-icon icon="fa-solid fa-location-dot" />
-      </span>
-      <span>
-        {{ endAddress }}
-      </span>
-    </p>
-    <p v-if="ticket && ticket.cticket">
+    </div>
+    <div v-if="ticket && ticket.cticket" class="eta-inner">
       <span>Guía: {{ ticket.cticket }}</span><br>
       <span>Estado: {{ ticket.state | formatTicketState }}</span>
-    </p>
-    <span style="font-size: small">Actualizado {{ updated }}</span><br>
-    <span style="font-size: smaller">{{ title }}</span>
+    </div>
   </div>
 </template>
 
@@ -65,7 +44,6 @@ export default {
   },
   computed: {
     ...mapGetters(['ticket', 'address', 'duration', 'distance', 'devices', 'geofences', 'startColor', 'endColor', 'onColor', 'endAddress', 'session', 'position']),
-    title: () => 'v' + document.title.split(' ')[1],
     fDistance () { return format.metric(this.distance) },
     updated () {
       const locale = locales[navigator.language.substring(0, 2)]
@@ -91,14 +69,19 @@ export default {
 }
 
 #eta {
-  max-width: 200px;
   background-color: #fffd;
   position: absolute;
-  margin: 10px;
   top: 0;
-  padding: 10px;
   overflow-y: scroll;
   font-family: sans-serif;
   transition: 0.3s;
+  border-radius: 10px;
+  display: flex;
+  top: 10px;
+  left: 10px;
+}
+.eta-inner {
+  text-align: center;
+  padding: 10px;
 }
 </style>

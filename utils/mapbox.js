@@ -22,3 +22,9 @@ export const format = {
     return m.toFixed(0) + 'm'
   }
 }
+
+export const loadImage = url => new Promise((resolve) => {
+  const image = new Image()
+  image.onload = () => resolve(image)
+  image.src = url
+})

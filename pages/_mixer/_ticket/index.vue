@@ -7,6 +7,9 @@
       <span :style="`position: absolute; left: ${timer<10?20:16}px; top: 14px; font-family: sans-serif;`">{{ timer }}</span>
       <span class="loader" />
     </div>
+    <div ref="title" style="font-size: smaller" class="mapboxgl-ctrl">
+      {{ title }}
+    </div>
   </div>
 </template>
 
@@ -17,7 +20,9 @@ import { mapGetters } from 'vuex'
 import { MapboxStyleSwitcherControl } from 'mapbox-gl-style-switcher'
 import Eta from '../../../components/eta.vue'
 import 'mapbox-gl-style-switcher/styles.css'
-import { format } from '~/utils/mapbox'
+import flag from '@/static/flag.svg'
+import { format, loadImage } from '~/utils/mapbox'
+import { pulsingDot } from '~/utils/pulsing-dot'
 
 mapboxgl.accessToken = process.env.MAPBOX_ACCESS_TOKEN
 let map = null
@@ -39,7 +44,8 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['duration', 'position', 'geofences', 'startColor', 'endColor', 'end', 'session'])
+    ...mapGetters(['duration', 'position', 'geofences', 'startColor', 'endColor', 'end', 'session']),
+    title: () => 'v' + document.title.split(' ')[1]
   },
   async mounted () {
     this.loading = true
@@ -58,18 +64,21 @@ export default {
         center: this.end || this.start,
         zoom: 12
       })
-
+      map.addControl({ onAdd: () => this.$refs.title }, 'bottom-left')
       map.addControl(new MapboxStyleSwitcherControl(this.styles, {
         eventListeners: {
           // return true if you want to stop execution
           //           onOpen: (event: MouseEvent) => boolean;
           //           onSelect: (event: MouseEvent) => boolean;
-          onChange: () => map.once('data', this.update)
+          onChange: () => map.once('data', this.onLoad)
         }
-      }))
-      map.on('load', () => {
-        this.initWebSocket()
-      })
+      }), 'bottom-right')
+      map.on('load', this.onLoad)
+    },
+    onLoad () {
+      map.addImage('pulsing-dot', pulsingDot, { pixelRatio: 2 })
+      loadImage(flag).then(img => map.addImage('flag', img))
+      this.initWebSocket()
     },
     async update () {
       const coordinates = [this.position.longitude, this.position.latitude]
@@ -90,7 +99,7 @@ export default {
         if (!map.getLayer('point')) {
           map.addLayer({
             id: 'point',
-            type: 'circle',
+            type: 'symbol',
             source: {
               type: 'geojson',
               data: {
@@ -107,9 +116,9 @@ export default {
                 ]
               }
             },
-            paint: {
-              'circle-radius': 10,
-              'circle-color': this.endColor
+            layout: {
+              'icon-image': 'flag',
+              'icon-anchor': 'bottom-right'
             }
           })
         }
@@ -124,7 +133,7 @@ export default {
       } else {
         map.addLayer({
           id: 'start',
-          type: 'circle',
+          type: 'symbol',
           source: {
             type: 'geojson',
             data: {
@@ -141,9 +150,8 @@ export default {
               ]
             }
           },
-          paint: {
-            'circle-radius': 10,
-            'circle-color': this.startColor
+          layout: {
+            'icon-image': 'pulsing-dot'
           }
         })
       }
@@ -193,12 +201,7 @@ export default {
         }
         if (this.duration === -1) {
           map.fitBounds(bbox(geojson), {
-            padding: {
-              top: 30,
-              bottom: 30,
-              left: 30,
-              right: 30
-            }
+            padding: 100
           })
         }
         this.$store.commit('setDuration', data.duration)
