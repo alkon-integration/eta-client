@@ -1,8 +1,3 @@
-const auth = {
-  username: process.env.TRACCAR_USER,
-  password: process.env.TRACCAR_PASS
-}
-
 export const state = () => ({
   duration: -1,
   distance: 0,
@@ -79,25 +74,14 @@ export const mutations = {
 
 export const actions = {
   async getData ({ commit }, { mixer, ticket }) {
-    const users = await this.$axios.$get('users', { auth })
     const email = 'polpaico' + mixer
-    let user = users.find(u => u.email === email)
-    if (!user) {
-      user = await this.$axios.$post('users', {
-        name: email,
-        email,
-        password: process.env.TRACCAR_PASS
-      }, { auth })
-    }
-    // this.$axios.$post('permissions', { userId: user.id, deviceId: device.id }, { auth }).catch(e => console.error(e))
-    const body = `email=${user.email}&password=${encodeURIComponent(process.env.TRACCAR_PASS)}`
+    const body = `email=${email}&password=${encodeURIComponent(process.env.TRACCAR_PASS)}`
     const session = await this.$axios.$post('/session', body)
     if (!session.token) {
       session.token = crypto.randomUUID()
       this.$axios.$put('/users/' + session.id, session).catch(e => console.error(e))
     }
     commit('SET_SESSION', session)
-    commit('SET_DEVICES', await this.$axios.$get('devices', { auth: { username: user.email, password: process.env.TRACCAR_PASS } }))
     const _ticket = await this.$dynamo.get(mixer)
     if (!_ticket || _ticket.cticket !== ticket) {
       alert('ticket invalido: ' + ticket + ' vs ' + (_ticket && _ticket.cticket))
