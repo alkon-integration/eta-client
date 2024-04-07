@@ -32,7 +32,7 @@ export default {
 
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
-    'mapbox-gl/dist/mapbox-gl.css', '@fortawesome/fontawesome-svg-core/styles.css'
+    'mapbox-gl/dist/mapbox-gl.css'
   ],
 
   plugins: [
