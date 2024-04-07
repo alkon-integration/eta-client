@@ -67,7 +67,7 @@ export default {
       map = new mapboxgl.Map({
         container: 'map',
         style: 'mapbox://styles/mapbox/streets-v12',
-        center: this.end || this.start,
+        center: this.end || this.start || [-70.66211402016457, -33.44690066435303],
         zoom: 12
       })
       map.addControl({ onAdd: () => this.$refs.title }, 'bottom-left')
