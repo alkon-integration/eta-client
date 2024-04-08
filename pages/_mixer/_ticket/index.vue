@@ -201,14 +201,14 @@ export default {
             },
             layout: {
               'line-join': 'round',
-              'line-cap': 'round'
+              'line-cap': 'round'              
             },
             paint: {
               'line-color': '#3887be',
               'line-width': 5,
               'line-opacity': 0.75
             }
-          })
+          }, 'start')
         }
         if (this.duration === -1) {
           map.fitBounds(bbox(geojson), {
