@@ -126,6 +126,7 @@ export default {
               }
             },
             layout: {
+              'icon-allow-overlap': true,
               'icon-image': 'flag',
               'icon-anchor': 'bottom-right'
             }
@@ -160,6 +161,7 @@ export default {
             }
           },
           layout: {
+            'icon-allow-overlap': true,
             'icon-image': 'pulsing-dot'
           }
         })
