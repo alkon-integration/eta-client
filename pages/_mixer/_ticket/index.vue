@@ -90,6 +90,7 @@ export default {
       this.initWebSocket()
     },
     async update () {
+      if (!this.position) { return }
       const coordinates = [this.position.longitude, this.position.latitude]
       const start = {
         type: 'FeatureCollection',
@@ -201,14 +202,14 @@ export default {
             },
             layout: {
               'line-join': 'round',
-              'line-cap': 'round'              
+              'line-cap': 'round'
             },
             paint: {
               'line-color': '#3887be',
               'line-width': 5,
               'line-opacity': 0.75
             }
-          }, 'start')
+          }, map.getLayer('start') && 'start')
         }
         if (this.duration === -1) {
           map.fitBounds(bbox(geojson), {
