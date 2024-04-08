@@ -4,8 +4,8 @@
     <eta />
     <div v-if="loading" id="overlay" style="display: inline-block" />
     <div v-if="loading" style="left: calc(50% - 24px); top: calc(50vh - 24px); width: 100%; position: relative;">
-      <span :style="`position: absolute; left: ${timer<10?20:16}px; top: 14px; font-family: sans-serif;`">{{ timer }}</span>
-      <span class="loader" />
+      <!--span :style="`position: absolute; left: ${timer<10?20:16}px; top: 14px; font-family: sans-serif;`">{{ timer }}</span-->
+      <!--span class="loader" /-->
     </div>
     <div ref="title" style="font-size: smaller" class="mapboxgl-ctrl">
       {{ title }}
@@ -52,6 +52,9 @@ export default {
       if (socket && this.session && this.session.token) {
         socket.send(this.session.token)
       }
+    },
+    end () {
+      this.update()
     }
   },
   mounted () {
