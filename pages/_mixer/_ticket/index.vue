@@ -36,7 +36,7 @@ export default {
       styles: [
         { title: this.$t('Obscuro'), uri: 'mapbox://styles/mapbox/dark-v11' },
         { title: 'Claro', uri: 'mapbox://styles/mapbox/light-v11' },
-        { title: 'Satelite', uri: 'mapbox://styles/mapbox/satellite-streets-v12' },
+        { title: 'Satelite', uri: 'mapbox://styles/mapbox/satellite-streets-v11' },
         { title: this.$t('Calles'), uri: 'mapbox://styles/mapbox/streets-v12' }
       ],
       timer: 0,
