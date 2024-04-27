@@ -171,6 +171,9 @@ export default {
     },
     async getRoute (start) {
       try {
+        if (map.getSource('route')) {
+          return
+        }
         const query = await fetch(
           `https://api.mapbox.com/directions/v5/mapbox/driving/${start[0]},${start[1]};${this.end[0]},${this.end[1]}?steps=true&geometries=geojson&access_token=${process.env.mapboxglAccessTokenDirections}`,
           { method: 'GET' }
