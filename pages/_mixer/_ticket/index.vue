@@ -49,7 +49,7 @@ export default {
   },
   watch: {
     session () {
-      if (socket && this.session && this.session.token) {
+      if (socket && this.session && this.session.token && socket && socket.readyState === 1) {
         socket.send(this.session.token)
       }
     },
